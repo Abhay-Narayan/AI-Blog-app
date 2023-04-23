@@ -1,4 +1,9 @@
 import './globals.css'
+import {Open_Sans} from "next/font/google";
+
+const OpenSans=Open_Sans({
+  subsets:["latin"],
+})
 
 export const metadata = {
   title: 'Create Next App',
@@ -11,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html className={OpenSans.className} lang="en">
       <body>{children}</body>
     </html>
   )
