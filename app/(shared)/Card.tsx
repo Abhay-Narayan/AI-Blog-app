@@ -1,42 +1,71 @@
-import Link from 'next/link';
-import React from 'react'
+import { Post } from "@prisma/client";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
 
 type Props = {
-    className ?:string;
-    imageHeight:string;
-    isSmallcard?:boolean;
-    isLongForm?:boolean;
-}
+  className?: string;
+  post: Post;
+  imageHeight: string;
+  isSmallcard?: boolean;
+  isLongForm?: boolean;
+};
 
-const Card = ({className, imageHeight, isSmallcard=false, isLongForm=false}: Props) => {
-  return (
+const Card = ({
+  className,
+  imageHeight,
+  post,
+  isSmallcard = false,
+  isLongForm = false,
+}: Props) => {
+    const {id, title, author, createdAt, image, snippet}=post||{};
+    const date= new Date(createdAt);
+    const options = {year:"numeric", month:"long", day :"numeric"} as any;
+    const formattedDate= date.toLocaleDateString("en-US", options);
+  return ( 
     <div className={className}>
-        <Link className='basis-full hover:opacity-70' href="/">
-            <div className={`relative w-auto mb-3 ${imageHeight}`}>image</div>
-        </Link>
-        <div className="basis-full">
-            <Link href="/">
-                <h4 className={`font-bold hover:text-accent-green
-                ${isSmallcard? "text-base":"text-lg"}
-                ${isSmallcard? "line-clamp-2":""} 
-                `}>Title</h4>
-            </Link>
-
-            <div className={`${isSmallcard ? "my-2": "flex my-3"} gap-3`}>
-                <h5 className='font-semibold text-xs '>author</h5>
-                <h6 className='text-wh-300 text-xs'>date</h6>
-            </div>
-            <p
-                className={`text-wh-100 ${
-                    isLongForm ? "line-clamp-5" : "line-clamp-3"
-                }`}
-                >
-                snippet
-            </p>
+      <Link className="basis-full hover:opacity-70" 
+        href={`${process.env.NEXT_PUBLIC_URL}/post/${post?.id}`}
+        >
+        <div className={`relative w-auto mb-3 ${imageHeight}`}>
+        <Image
+                  fill 
+                  style={{objectFit:"cover"}}
+                  placeholder='blur'
+                  src={image}
+                  sizes='(max-width:480px) 100vw,
+                         (max-width:768px) 75vw,
+                         (max-width:1060px) 50vw,33vw   '
+                  alt='Tech'
+                />
         </div>
+      </Link>
+      <div className="basis-full">
+        <Link href={`${process.env.NEXT_PUBLIC_URL}/post/${post?.id}`}>
+          <h4
+            className={`font-bold hover:text-accent-green
+                ${isSmallcard ? "text-base" : "text-lg"}
+                ${isSmallcard ? "line-clamp-2" : ""} 
+                `}
+          >
+            {title}
+          </h4>
+        </Link>
 
+        <div className={`${isSmallcard ? "my-2" : "flex my-3"} gap-3`}>
+          <h5 className="font-semibold text-xs ">{author}</h5>
+          <h6 className="text-wh-300 text-xs">{formattedDate}</h6>
+        </div>
+        <p
+          className={`text-wh-500 ${
+            isLongForm ? "line-clamp-5" : "line-clamp-3"
+          }`}
+        >
+          {snippet}
+        </p>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Card
+export default Card;
