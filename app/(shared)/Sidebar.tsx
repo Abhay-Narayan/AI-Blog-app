@@ -29,7 +29,7 @@ const Sidebar = (props: Props) => {
         <h4 className='bg-wh-900 py-3 px-5 text-wh-50 text-xs font-bold text-center '>
             About the Blog..
         </h4>
-        <div className="flex justify-center">
+        <div className="flex justify-center my-3">
         <Image 
                   style={{ width:"500px", height:"300px", objectFit:"cover"}}
                   placeholder='blur'
